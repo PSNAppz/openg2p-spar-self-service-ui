@@ -10,11 +10,12 @@ import Loading from "../loading";
 
 export default function Next() {
   const localActive = useLocale();
+  AuthUtil({failedRedirectUrl: `/${localActive}/login`});
+
   const t = useTranslations("Update");
 
   return (
     <main>
-      <AuthUtil failedRedirectUrl={`/${localActive}/login`} />
       <div className="flex flex-row ">
         <div className="2xl:h-screen bg-gray-100 basis-1/2 flex items-center justify-center ">
           <div className="pl-6 mt-16 pt-2 pb-0 mb-0 ">

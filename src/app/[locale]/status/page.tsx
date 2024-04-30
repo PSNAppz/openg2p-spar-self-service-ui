@@ -12,9 +12,12 @@ import Loading from "../loading";
 
 export default function Next() {
   const localActive = useLocale();
+  AuthUtil({failedRedirectUrl: `/${localActive}/login`});
+
   const t = useTranslations("Status");
   const router = useRouter();
   const {isDataSubmitted} = useSubmission();
+
   useEffect(() => {
     if (!isDataSubmitted) {
       router.push("/en/home");
@@ -23,7 +26,6 @@ export default function Next() {
 
   return (
     <main>
-      <AuthUtil failedRedirectUrl={`/${localActive}/login`} />
       <div className="flex flex-row ">
         <div className="2xl:h-screen bg-gray-100 basis-1/2 flex items-center justify-center">
           <div className="pl-6 mt-28">

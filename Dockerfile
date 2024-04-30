@@ -21,12 +21,12 @@ COPY --chown=nextjs:nodejs . .
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
 # Uncomment the following line in case you want to disable telemetry during the build.
-ARG NEXT_TELEMETRY_DISABLED 1
-ARG NODE_ENV production
-ARG HOSTNAME "0.0.0.0"
-ARG PORT 3000
-ARG NEXT_PUBLIC_BASE_PATH /selfservice
-ARG NEXT_PUBLIC_BASE_API_PATH /spar/v1
+ARG NEXT_TELEMETRY_DISABLED=1
+ARG NODE_ENV=production
+ARG HOSTNAME="0.0.0.0"
+ARG PORT=3000
+ARG NEXT_PUBLIC_BASE_PATH=/selfservice
+ARG NEXT_PUBLIC_BASE_API_PATH=/spar/v1
 
 EXPOSE 3000
 

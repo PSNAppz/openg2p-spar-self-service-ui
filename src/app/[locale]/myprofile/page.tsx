@@ -10,20 +10,15 @@ import {useAuth} from "@/app/store/auth-context";
 import {AuthUtil} from "@/app/components/auth";
 export default function ProfilePage() {
   const localActive = useLocale();
+  AuthUtil({failedRedirectUrl: `/${localActive}/login`});
+
   const t = useTranslations("Profile");
   const {profile} = useAuth();
 
-  const name = profile?.name || "Guest ";
-  const phoneNumber = profile?.phone_number || "+745 12345 67890";
-  const email = profile?.email || "johnsmith@gmail.com";
-  const dob = profile?.birthdate || "1974/07/01";
-  const gender = profile?.gender || "Male";
   const profilePicture = profile?.picture || prefixBasePath("/img/user_image_02.png");
   return (
     <>
       <div>
-        <AuthUtil failedRedirectUrl={`/${localActive}/login`} />
-
         <div className="flex flex-row">
           <div className=" h-screen bg-gray-200 basis-1/4">
             <div className="w-1/2 m-24 ">
@@ -48,7 +43,7 @@ export default function ProfilePage() {
                   <div className=" opacity-100 flex items-start ">
                     <div className="flex-1 min-w-0 mt-2 ">
                       <div className="text-sm font-medium text-gray-600  no-underdivne ">{t("name")}</div>
-                      <p className="text-2xl text-orange-500  ">{name}</p>
+                      <p className="text-2xl text-orange-500  ">{profile?.name}</p>
                     </div>
                   </div>
                   <div className="flex justify-between mt-2">
@@ -64,7 +59,7 @@ export default function ProfilePage() {
                       </div>
                       <div className="flex-1 min-w-0 mt-2 ">
                         <div className="text-sm font-medium text-gray-600  no-underdivne ">{t("ph_no")}</div>
-                        <p className="text-md text-black font-bold ">{phoneNumber}</p>
+                        <p className="text-md text-black font-bold ">{profile?.phone_number}</p>
                       </div>
                     </div>
                     <div className=" opacity-100 flex items-start ">
@@ -79,7 +74,7 @@ export default function ProfilePage() {
                       </div>
                       <div className="flex-1 min-w-0 mt-2 ">
                         <div className="text-sm font-medium text-gray-600  no-underdivne ">{t("email")}</div>
-                        <p className="text-md text-black font-bold">{email}</p>
+                        <p className="text-md text-black font-bold">{profile?.email}</p>
                       </div>
                     </div>
                   </div>
@@ -97,7 +92,7 @@ export default function ProfilePage() {
                       </div>
                       <div className="flex-1 min-w-0 mt-2 ">
                         <div className="text-sm font-medium text-gray-600  no-underdivne ">{t("dob")}</div>
-                        <p className="text-md text-black font-bold ">{dob}</p>
+                        <p className="text-md text-black font-bold ">{profile?.birthdate}</p>
                       </div>
                     </div>
                     <div className=" opacity-100 flex items-start mr-28">
@@ -112,7 +107,7 @@ export default function ProfilePage() {
                       </div>
                       <div className="flex-1 min-w-0 mt-2 ">
                         <div className="text-sm font-medium text-gray-600  no-underdivne ">{t("gender")}</div>
-                        <p className="text-md text-black font-bold ">{gender}</p>
+                        <p className="text-md text-black font-bold ">{profile?.gender}</p>
                       </div>
                     </div>
                   </div>

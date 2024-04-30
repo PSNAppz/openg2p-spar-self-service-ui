@@ -22,7 +22,7 @@ export default function LocalSwitcher() {
     const nextLocale = e.target.value as "en" | "fr" | "tl";
     startTransition(() => {
       const newPath = `/${nextLocale}${currentPath.substring(3)}`;
-      router.replace(newPath);
+      router.push(newPath);
     });
   };
 
