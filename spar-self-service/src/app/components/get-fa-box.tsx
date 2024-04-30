@@ -25,6 +25,7 @@ export default function GetFaBox() {
       (res) => {
         if (res.response_payload.fa) {
           setGetFaResult(res.response_payload.fa);
+          setIsUnLinked(res.response_payload.fa === null);
         }
         else if(res.response_payload.fa===null){
           setGetFaResult(res.response_payload.fa);
@@ -43,11 +44,13 @@ export default function GetFaBox() {
   }, []);
 
   const handleClick = () => {
-    unlinkFa();
-    setIsUnLinked(true);
+    const confirmed = window.confirm("Are you sure you want to unlink?");
+    if (confirmed) {
+      setIsUnLinked(true);
+      unlinkFa();
+    }
   };
-  
-  
+  console.log(getFaResult)
   return (
     <>
       <div className="container 2xl:m-36 ">
