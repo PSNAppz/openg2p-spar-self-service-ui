@@ -3,6 +3,7 @@ import Image from "next/image";
 import {AuthUtil} from "@/app/components/auth";
 import {useLocale} from "next-intl";
 import {Suspense, useEffect} from "react";
+import {useRouter} from "next/navigation";
 import {useTranslations} from "next-intl";
 import Link from "next/link";
 import {prefixBasePath} from "@/utils/path";
@@ -12,6 +13,12 @@ export default function Next() {
   const localActive = useLocale();
   const t = useTranslations("Delete");
   const {isUnLinked} = useUnlinked();
+  const router = useRouter();
+  useEffect(() => {
+    if (!isUnLinked) {
+      router.push("/en/home");
+    }
+  }, []);
   return (
     <main>
       <AuthUtil failedRedirectUrl={`/${localActive}/login`} />
