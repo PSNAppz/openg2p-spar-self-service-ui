@@ -1,34 +1,40 @@
 FROM node:18-alpine AS base
 
+FROM base AS builder
 # Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
 RUN apk add --no-cache libc6-compat
+
+WORKDIR /app
+
+COPY package.json package-lock.json* ./
+
+RUN npm ci
+
+COPY . .
+
+ENV NEXT_TELEMETRY_DISABLED 1
+RUN npm run build
+
+FROM base AS runner
+WORKDIR /app
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-WORKDIR /app
+RUN mkdir .next
+RUN chown nextjs:nodejs .next
 
-RUN chown -R nextjs:nodejs /app
+COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 USER nextjs
 
-# Install dependencies based on the preferred package manager
-COPY --chown=nextjs:nodejs package.json package-lock.json* ./
-RUN npm ci
-
-COPY --chown=nextjs:nodejs . .
-
-# Next.js collects completely anonymous telemetry data about general usage.
-# Learn more here: https://nextjs.org/telemetry
-# Uncomment the following line in case you want to disable telemetry during the build.
-ARG NEXT_TELEMETRY_DISABLED=1
-ARG NODE_ENV=production
-ARG HOSTNAME="0.0.0.0"
-ARG PORT=3000
-ARG NEXT_PUBLIC_BASE_PATH=/selfservice
-ARG NEXT_PUBLIC_BASE_API_PATH=/spar/v1
+ENV NEXT_TELEMETRY_DISABLED 1
+ENV NODE_ENV production
+ENV PORT 3000
+ENV BASE_PATH /selfservice
 
 EXPOSE 3000
 
-RUN npm run build
-CMD npm run start
+CMD HOSTNAME="0.0.0.0" node server.js

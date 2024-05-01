@@ -34,9 +34,6 @@ jobs:
           docker build . \
             --file Dockerfile \
             --tag $IMAGE_ID:$VERSION
-          docker build . \
-            --file Dockerfile.runtime-build \
-            --tag $IMAGE_ID:$VERSION-runtime-build
 
           if [[ '${{ secrets.docker_hub_token }}' != '' && '${{ secrets.docker_hub_actor }}' != '' ]]; then
             export DOCKER_PUSH="true"
@@ -47,4 +44,3 @@ jobs:
         run: |
           echo "${{ secrets.docker_hub_token }}" | docker login -u ${{ secrets.docker_hub_actor }} --password-stdin
           docker push ${{ env.IMAGE_ID }}:${{ env.VERSION }}
-          docker push ${{ env.IMAGE_ID }}:${{ env.VERSION }}-runtime-build

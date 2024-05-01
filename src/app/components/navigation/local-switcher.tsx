@@ -1,12 +1,11 @@
 "use client";
 
 import {Menu, Transition} from "@headlessui/react";
-import {useLocale} from "next-intl";
+import {useLocale, useTranslations} from "next-intl";
 import Image from "next/image";
-import {useRouter} from "next/navigation";
-import {ChangeEvent, Fragment, useTransition} from "react";
-
-import {usePathname} from "next/navigation";
+import {useRouter, usePathname} from "next/navigation";
+import {Fragment, useTransition} from "react";
+import {getSupportedLocales} from "@/utils/lang";
 import {prefixBasePath} from "@/utils/path";
 function classNames(...classes: string[]): string {
   return classes.filter(Boolean).join(" ");
@@ -15,40 +14,25 @@ function classNames(...classes: string[]): string {
 export default function LocalSwitcher() {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
-  const localActive = useLocale() as "en" | "fr" | "tl";
+  const localActive = useLocale();
+  const t = useTranslations();
   const currentPath = usePathname();
+  const supportedLocales = getSupportedLocales();
 
-  const onSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    const nextLocale = e.target.value as "en" | "fr" | "tl";
+  const onSelectChange = (nextLocale: string) => {
     startTransition(() => {
-      const newPath = `/${nextLocale}${currentPath.substring(3)}`;
+      const newPath = currentPath.replace(localActive, nextLocale);
       router.push(newPath);
     });
   };
-
-  const getFlagImage = (locale: "en" | "fr" | "tl") => {
-    const flagImages = {
-      en: prefixBasePath("/img/flag_en.png"),
-      fr: prefixBasePath("/img/flag_fr.png"),
-      tl: prefixBasePath("/img/flag_tl.png"),
-    };
-
-    return flagImages[locale];
-  };
-
-  const languageOptions: {value: "en" | "fr" | "tl"; label: string}[] = [
-    {value: "en", label: "English"},
-    {value: "fr", label: "French"},
-    {value: "tl", label: "Filipino"},
-  ];
 
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="flex justify-between items-center w-full gap-x-2 px-2 py-2 text-sm text-black hover:bg-gray-50">
-          <Image src={getFlagImage(localActive)} alt={localActive} width={20} height={20} />
+          <Image src={prefixBasePath(t(`@flag_url_${localActive}`))} alt={localActive} width={20} height={20} />
 
-          <span>{localActive === "en" ? "English" : localActive === "fr" ? "French" : "Filipino"}</span>
+          <span>{t(`@language_title_${localActive}`)}</span>
           <Image
             className="w-3 h-3 mr-2"
             src={prefixBasePath("/img/down_arrow.png")}
@@ -56,13 +40,6 @@ export default function LocalSwitcher() {
             width={60}
             height={60}
           />
-          <select value={localActive} className="hidden" onChange={onSelectChange} disabled={isPending}>
-            {languageOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select>
         </Menu.Button>
       </div>
 
@@ -77,20 +54,18 @@ export default function LocalSwitcher() {
       >
         <Menu.Items className="absolute flex-col right-0  z-10 mt-2 w-56 origin-top-right rounded-md bg-white ring-1 ring-gray-400  focus:outline-none">
           <div className="py-1 flex-col items-center">
-            {languageOptions.map((option) => (
-              <Menu.Item key={option.value}>
+            {supportedLocales.map((option: string) => (
+              <Menu.Item key={`locale-${option}`}>
                 {({active}) => (
                   <button
-                    onClick={() =>
-                      onSelectChange({target: {value: option.value}} as ChangeEvent<HTMLSelectElement>)
-                    }
+                    onClick={() => onSelectChange(option)}
                     className={classNames(
                       active ? "bg-gray-100 w-full text-gray-900" : "text-gray-700",
                       "px-4 py-2 text-sm flex items-center gap-2"
                     )}
                   >
-                    <Image src={getFlagImage(option.value)} alt={option.value} width={20} height={20} />
-                    <span>{option.label}</span>
+                    <Image src={prefixBasePath(t(`@flag_url_${option}`))} alt={option} width={20} height={20} />
+                    <span>{t(`@language_title_${option}`)}</span>
                   </button>
                 )}
               </Menu.Item>

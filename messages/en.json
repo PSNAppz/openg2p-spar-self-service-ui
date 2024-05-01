@@ -1,4 +1,13 @@
 {
+  "@language_title_en": "English",
+  "@flag_url_en": "/img/flag_en.png",
+
+  "@language_title_fr": "Français",
+  "@flag_url_fr": "/img/flag_fr.png",
+
+  "@language_title_tl": "Tagalog",
+  "@flag_url_tl": "/img/flag_tl.png",
+
   "NotFoundPage": {
     "title": "Page Not Found",
     "description": "Oops! It seems like you've stumbled upon a page that doesn't exist. Don't worry, our internationalization magic is still hard at work on other parts of the app. Feel free to navigate back to explore more!"
