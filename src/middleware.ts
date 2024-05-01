@@ -1,6 +1,6 @@
-import {NextRequest, NextResponse} from 'next/server';
+import {NextRequest} from "next/server";
 import createMiddleware from "next-intl/middleware";
-import { getConfig, getSupportedLocales } from '@/utils/config';
+import {getSupportedLocales} from "@/utils/path";
 
 const nextIntlMiddleware = createMiddleware({
   locales: getSupportedLocales(),
@@ -8,9 +8,7 @@ const nextIntlMiddleware = createMiddleware({
 });
 
 export function middleware(request: NextRequest) {
-  if(request.nextUrl.pathname.endsWith("/config")){
-    return NextResponse.json(getConfig());
-  } else if (getSupportedLocales().some((lang: string) => request.nextUrl.pathname.startsWith(`/${lang}`))){
+  if (getSupportedLocales().some((lang: string) => request.nextUrl.pathname.startsWith(`/${lang}`))) {
     return nextIntlMiddleware(request);
   }
 }

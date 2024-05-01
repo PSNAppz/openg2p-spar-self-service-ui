@@ -5,8 +5,7 @@ import {useLocale, useTranslations} from "next-intl";
 import Image from "next/image";
 import {useRouter, usePathname} from "next/navigation";
 import {Fragment, useTransition} from "react";
-import {getSupportedLocales} from "@/utils/lang";
-import {prefixBasePath} from "@/utils/path";
+import {prefixBasePath, getSupportedLocales} from "@/utils/path";
 function classNames(...classes: string[]): string {
   return classes.filter(Boolean).join(" ");
 }
@@ -30,7 +29,12 @@ export default function LocalSwitcher() {
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="flex justify-between items-center w-full gap-x-2 px-2 py-2 text-sm text-black hover:bg-gray-50">
-          <Image src={prefixBasePath(t(`@flag_url_${localActive}`))} alt={localActive} width={20} height={20} />
+          <Image
+            src={prefixBasePath(t(`@flag_url_${localActive}`))}
+            alt={localActive}
+            width={20}
+            height={20}
+          />
 
           <span>{t(`@language_title_${localActive}`)}</span>
           <Image
@@ -64,7 +68,12 @@ export default function LocalSwitcher() {
                       "px-4 py-2 text-sm flex items-center gap-2"
                     )}
                   >
-                    <Image src={prefixBasePath(t(`@flag_url_${option}`))} alt={option} width={20} height={20} />
+                    <Image
+                      src={prefixBasePath(t(`@flag_url_${option}`))}
+                      alt={option}
+                      width={20}
+                      height={20}
+                    />
                     <span>{t(`@language_title_${option}`)}</span>
                   </button>
                 )}
