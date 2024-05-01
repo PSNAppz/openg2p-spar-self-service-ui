@@ -1,6 +1,6 @@
 import {getRequestConfig} from "next-intl/server";
 import {notFound} from "next/navigation";
-import {getSupportedLocales} from "@/utils/path";
+import {getSupportedLocales} from "@/utils/lang";
 
 export default getRequestConfig(async ({locale}) => {
   if (!getSupportedLocales().includes(locale as any)) notFound();

@@ -5,7 +5,8 @@ import {useLocale, useTranslations} from "next-intl";
 import Image from "next/image";
 import {useRouter, usePathname} from "next/navigation";
 import {Fragment, useTransition} from "react";
-import {prefixBasePath, getSupportedLocales} from "@/utils/path";
+import {getSupportedLocales} from "@/utils/lang";
+import {prefixBasePath} from "@/utils/path";
 function classNames(...classes: string[]): string {
   return classes.filter(Boolean).join(" ");
 }

@@ -40,7 +40,9 @@ export default function LoginBox() {
               className="inline-block bg-black rounded-3xl shadow shadow-orange-300 text-center px-3 py-2 hover:bg-customYellow mt-2"
             >
               <a
-                href={prefixBaseApiPath(`/auth/getLoginProviderRedirect/${x.id}`)}
+                href={prefixBaseApiPath(
+                  `/auth/getLoginProviderRedirect/${x.id}?redirect_uri=${prefixBasePath("/")}`
+                )}
                 className="text-white font-bold text-xl p-4"
               >
                 {t("button_text")}

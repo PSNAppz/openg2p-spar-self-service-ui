@@ -1,6 +1,6 @@
 import {NextRequest} from "next/server";
 import createMiddleware from "next-intl/middleware";
-import {getSupportedLocales} from "@/utils/path";
+import {getSupportedLocales} from "@/utils/lang";
 
 const nextIntlMiddleware = createMiddleware({
   locales: getSupportedLocales(),

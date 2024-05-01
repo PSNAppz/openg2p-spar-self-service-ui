@@ -8,9 +8,5 @@ export default function Root() {
     failedRedirectUrl: `/${localActive}/login`,
   };
 
-  return (
-    <div>
-      <AuthUtil {...authUtilProps} />
-    </div>
-  );
+  return <AuthUtil {...authUtilProps} />;
 }
