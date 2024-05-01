@@ -24,7 +24,7 @@ interface SubmissionContextType {
 
 interface UnlinkedContextType {
   isUnLinked: boolean;
-  setIsUnLinked: (status: boolean) => void;
+  setUnLinked: (status: boolean) => void;
 }
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const SubmissionContext = createContext<SubmissionContextType | undefined>(undefined);
@@ -64,7 +64,7 @@ export function useUnlinked() {
 export function AuthProvider({children}: AuthProviderProps) {
   const [profile, setProfile] = useState<AuthContextType["profile"]>(null);
   const [isDataSubmitted, setDataSubmitted] = useState<boolean>(false);
-  const [isUnLinked, setIsUnLinked] = useState<boolean>(false);
+  const [isUnLinked, setUnLinked] = useState<boolean>(false);
   const authContext: AuthContextType = {
     profile,
     setProfile,
@@ -75,14 +75,14 @@ export function AuthProvider({children}: AuthProviderProps) {
   };
   const unlinkedContext: UnlinkedContextType = {
     isUnLinked,
-    setIsUnLinked,
+    setUnLinked,
   };
 
   return (
     <AuthContext.Provider value={authContext}>
-      <UnlinkedContext.Provider value={unlinkedContext}>
-        <SubmissionContext.Provider value={submissionContext}>{children}</SubmissionContext.Provider>
-      </UnlinkedContext.Provider>
+      <SubmissionContext.Provider value={submissionContext}>
+        <UnlinkedContext.Provider value={unlinkedContext}>{children}</UnlinkedContext.Provider>
+      </SubmissionContext.Provider>
     </AuthContext.Provider>
   );
 }
