@@ -37,7 +37,7 @@ export default function UpdateFaBox() {
   const localActive = useLocale();
   const t = useTranslations("Update");
   const { setDataSubmitted } = useSubmission();
-  const { isUnLinked } = useUnlinked();
+  const { isUnLinked,setUnLinked } = useUnlinked();
 
   const [subTab, setSubTab] = useState(0);
   const [formData, setFormData] = useState<State>({ choices: [], levels: [] });
@@ -61,7 +61,7 @@ export default function UpdateFaBox() {
       arr.length = index + 1;
     }
   }
-
+console.log("isUnLinked",isUnLinked)
   function fetchLevelsAndRender(
     tab: any,
     localFormData: State,
@@ -300,6 +300,7 @@ export default function UpdateFaBox() {
         linkFa(
           (finalData)
         );
+          setUnLinked(false)
         console.log("Form Data upon submission:", formData);
         setRenderState(3);
         router.push(`/${localActive}/status`);
@@ -364,18 +365,19 @@ export default function UpdateFaBox() {
             x.input_type === 'select' ? (
               <div>
                 <label className="text-black text-sm">{x.name}</label>
-                <input
-    list={`datalist-${i}`}
-    className="outline-none w-full border-t-2 p-3 border border-gray-500 shadow-md rounded-md bg-white"
-    onChange={(event) => onFieldChange(subTab, i, event.target.value)}
-    value={formData.choices[i]?.value}
-    required
-  />
-  <datalist id={`datalist-${i}`}>
-    {x.options?.map((y, j) => (
-      <option key={`datalist-option-${j}`} value={y.name} />
-    ))}
-  </datalist>
+                <select
+                  className="outline-none w-full border-t-2 p-3 border border-gray-500 shadow-md rounded-md bg-white"
+                  onChange={(event) => onFieldChange(subTab, i, event.target.value)}
+                  value={formData.choices[i]?.value}
+                  required
+                >
+                  <option value="">Select {x.name}</option>
+                  {x.options?.map((y, j) => (
+                    <option className="p-4" key={`input-option-${j}`} value={y.code}>
+                      {y.name}
+                    </option>
+                  ))}
+                </select>
               </div>
             ) : (
               <div className="flex flex-col">

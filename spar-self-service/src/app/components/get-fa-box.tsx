@@ -14,7 +14,7 @@ import {useUnlinked} from "@/app/store/auth-context";
 export default function GetFaBox() {
   const localActive = useLocale();
   const [getFaResult, setGetFaResult] = useState<any>();
-  const {setIsUnLinked} = useUnlinked();
+  const {setUnLinked,isUnLinked} = useUnlinked();
   // 0 - default/empty. 1 - loading. 2 - output. 3 - error.
   const [renderState, setRenderState] = useState(0);
   const t = useTranslations("home");
@@ -25,10 +25,12 @@ export default function GetFaBox() {
       (res) => {
         if (res.response_payload.fa) {
           setGetFaResult(res.response_payload.fa);
-          setIsUnLinked(res.response_payload.fa === null);
+          
         }
         else if(res.response_payload.fa===null){
           setGetFaResult(res.response_payload.fa);
+          setUnLinked(true);
+          console.log("isUnLinked updated:", res.response_payload.fa === null);
         }
         setRenderState(2);
       },
@@ -40,17 +42,16 @@ export default function GetFaBox() {
   
 
   useEffect(() => {
+    console.log("isUnLinked :", isUnLinked);
+    // console.log("setIsUnLinked :", setIsUnLinked);
     onClick();
-  }, []);
+  }, [isUnLinked]);
 
   const handleClick = () => {
-    const confirmed = window.confirm("Are you sure you want to unlink?");
-    if (confirmed) {
-      setIsUnLinked(true);
-      unlinkFa();
-    }
+    setUnLinked(true);
+    unlinkFa();
   };
-  console.log(getFaResult)
+
   return (
     <>
       <div className="container 2xl:m-36 ">

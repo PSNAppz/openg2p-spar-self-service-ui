@@ -4,7 +4,7 @@ import {Header} from "../components";
 import type {Metadata} from "next";
 import {Roboto} from "next/font/google";
 import {NextIntlClientProvider, useMessages} from "next-intl";
-import {AuthProvider} from "../store/auth-context";
+import {AuthProvider,} from "../store/auth-context";
 
 const roboto = Roboto({
   subsets: ["latin"],
