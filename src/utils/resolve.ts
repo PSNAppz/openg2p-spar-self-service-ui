@@ -1,7 +1,7 @@
 import {prefixBaseApiPath} from "./path";
 
 export function getFa(succFunc?: (_res: any) => any, failFunc?: (_res: any, _err: any) => any) {
-  fetch(prefixBaseApiPath("/selfservice/resolve"), {
+  fetch(prefixBaseApiPath("/resolve"), {
     method: "POST",
   })
     .then((res) => {

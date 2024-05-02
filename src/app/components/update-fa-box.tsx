@@ -30,8 +30,6 @@ export interface LinkOrUpdate {
   email_address?: string;
 }
 
-export const initialFinalData: LinkOrUpdate = {};
-
 export default function UpdateFaBox() {
   const localActive = useLocale();
   const t = useTranslations("Update");
@@ -41,7 +39,7 @@ export default function UpdateFaBox() {
   const [subTab, setSubTab] = useState(0);
   const [formData, setFormData] = useState<State>({choices: [], levels: []});
 
-  const [finalData, setFinalData] = useState<LinkOrUpdate>(initialFinalData);
+  const [finalData, setFinalData] = useState<LinkOrUpdate>({});
 
   const [Level, setLevel] = useState<FormLevel[]>();
   //  0 - empty/default. 1 - update form. 2 - loading. 3 - succ. 4 - fail.
@@ -51,6 +49,7 @@ export default function UpdateFaBox() {
   const [isValidPhone, isntValidPhone] = useState(true);
   const [isValidAcc, isntValidAcc] = useState(true);
   const [levelsSet, setLevelsSet] = useState(false);
+
   function pushOrResetArrayAfterIndex<T>(arr: T[], index: number, value: T) {
     if (arr.length <= index) {
       arr.push(value);
@@ -59,7 +58,6 @@ export default function UpdateFaBox() {
       arr.length = index + 1;
     }
   }
-  console.log("isUnLinked", isUnLinked);
   function fetchLevelsAndRender(
     tab: any,
     localFormData: State,
@@ -163,17 +161,6 @@ export default function UpdateFaBox() {
             setLevel(levels);
             setLevelsSet(true);
           }
-          let formDataToPush: FormLevel;
-
-          if (tab === 0 || tab === 1) {
-            formDataToPush = levels[0];
-          } else if (tab == 2) {
-            formDataToPush = levels[1];
-          } else {
-            formDataToPush = levels[2];
-          }
-          pushOrResetArrayAfterIndex(localFormData.levels, listIndex, formDataToPush);
-          setFormData(localFormData);
         }
       });
     });
@@ -206,10 +193,8 @@ export default function UpdateFaBox() {
         if (x.name === "Account") {
           const regex = new RegExp(x.validation_regex);
           const value = formData.choices[i]?.value || "";
-          console.log("Regex pattern:", x.validation_regex);
-          console.log("Value:", value);
+
           if (!value || value === "" || !regex.test(value)) {
-            console.log("Invalid account value:", value);
             accIsValid = false;
           } else {
             console.log("Valid account value:", value);
@@ -229,49 +214,28 @@ export default function UpdateFaBox() {
         }
         return;
       }
-      if (formData.choices[1].key == "Bank") {
-        finalData.fa_type = "bank";
-        finalData.strategy_id = formData.choices[1].strategy;
-        finalData.bank_name = formData.choices[1].value;
-        finalData.bank_code = formData.choices[1].code;
-        finalData.branch_name = formData.choices[2].value;
-        finalData.branch_code = formData.choices[2].code;
-        finalData.account_number = formData.choices[3].value;
-      } else if (formData.choices[0].key == "Bank" && formData.choices[1].key == "Mobile Wallet") {
-        finalData.fa_type = "mobile_wallet_provider";
-        finalData.wallet_provider_name = formData.choices[1].value;
-        finalData.strategy_id = formData.choices[1].strategy;
-        finalData.wallet_provider_code = formData.choices[1].code;
-        finalData.mobile_number = formData.choices[2].value;
-      } else if (formData.choices[0].key == "Bank") {
+      if (formData.choices[0].key == "Bank") {
         finalData.fa_type = "bank";
         finalData.strategy_id = formData.choices[0].strategy;
         finalData.bank_name = formData.choices[0].value;
         finalData.bank_code = formData.choices[0].code;
         finalData.branch_name = formData.choices[1].value;
         finalData.branch_code = formData.choices[1].code;
-        finalData.account_number = formData.choices[3].value;
+        finalData.account_number = formData.choices[2].value;
       } else if (formData.choices[0].key == "Mobile Wallet") {
         finalData.fa_type = "mobile_wallet_provider";
         finalData.wallet_provider_name = formData.choices[0].value;
         finalData.strategy_id = formData.choices[0].strategy;
         finalData.wallet_provider_code = formData.choices[0].code;
-        finalData.mobile_number = formData.choices[2].value;
+        finalData.mobile_number = formData.choices[1].value;
       } else if (formData.choices[0].key == "Email Wallet") {
-        finalData.fa_type = "mobile_wallet_provider";
+        finalData.fa_type = "email_wallet_provider";
         finalData.wallet_provider_name = formData.choices[0].value;
         finalData.strategy_id = formData.choices[0].strategy;
         finalData.wallet_provider_code = formData.choices[0].code;
-        finalData.email_address = formData.choices[2].value;
-      } else if (formData.choices[0].key == "Bank" && formData.choices[1].key == "Email Wallet") {
-        finalData.fa_type = "mobile_wallet_provider";
-        finalData.wallet_provider_name = formData.choices[1].value;
-        finalData.strategy_id = formData.choices[1].strategy;
-        finalData.wallet_provider_code = formData.choices[1].code;
-        finalData.email_address = formData.choices[2].value;
+        finalData.email_address = formData.choices[1].value;
       }
-      console.log(finalData);
-      console.log(isUnLinked);
+
       if (!isUnLinked) {
         updateFa(finalData);
         setDataSubmitted(true);
@@ -290,15 +254,15 @@ export default function UpdateFaBox() {
 
   function onFieldChange(tab: number, listIndex: number, code: string) {
     const localFormData = structuredClone(formData);
-    const formLevel = localFormData.levels[listIndex];
-
+    const formLevel = formData.levels[listIndex];
     let selectedOption: FormLevelValue;
     let namevalue: string = "";
     let strategy: number = 0;
     formLevel.options?.forEach((x) => {
       if (x.code === code) {
         selectedOption = x;
-        (namevalue = x.name), (strategy = x.strategy_id);
+        namevalue = x.name;
+        strategy = x.strategy_id;
         fetchLevelsAndRender(0, localFormData, listIndex + 1, selectedOption.level_id, selectedOption.id);
         return;
       }
@@ -309,6 +273,7 @@ export default function UpdateFaBox() {
       code,
       strategy,
     };
+
     pushOrResetArrayAfterIndex(localFormData.choices, listIndex, codeObject);
     if (formLevel.input_type == "input") {
       localFormData.choices[listIndex] = {key: formLevel.name, value: code};
@@ -318,15 +283,13 @@ export default function UpdateFaBox() {
   }
   const handleTabClick = (tab: any, id: number, parent: number) => {
     const updatedFormData = {...formData};
-    console.log(updatedFormData);
     setSubTab(tab);
     const vals = Level;
     if (vals) {
       const tabIndex = vals.findIndex((option) => option.id === id);
-      fetchLevelsAndRender(tab, formData, 1, parent, 0, id);
+      fetchLevelsAndRender(tab, formData, 0, parent, 0, id);
       if (tabIndex !== -1) {
         const selectedOption = vals[tabIndex];
-        onFieldChange(tab, 0, selectedOption.name);
         setFormData(updatedFormData);
       }
     }
@@ -334,73 +297,71 @@ export default function UpdateFaBox() {
   useEffect(() => {
     updateFaSubmit();
   }, []);
+
   const renderFormInputs = (subTab: number) => (
     <div>
       {formData.levels.map((x, i) => (
-        <div key={`input-${i}`} className="mb-2 mt-0 p-0">
-          {i > 0 &&
-            (x.input_type === "select" ? (
-              <div>
-                <label className="text-black text-sm">{x.name}</label>
-                <select
-                  className="outline-none w-full border-t-2 p-3 border border-gray-500 shadow-md rounded-md bg-white"
-                  onChange={(event) => onFieldChange(subTab, i, event.target.value)}
-                  value={formData.choices[i]?.value}
-                  required
+        <div key={`input-${x.level_type}`} className="mb-2 mt-0 p-0">
+          {x.input_type === "select" ? (
+            <div>
+              <label className="text-black text-sm">{x.name}</label>
+              <select
+                className="outline-none w-full border-t-2 p-3 border border-gray-500 shadow-md rounded-md bg-white"
+                onChange={(event) => onFieldChange(subTab, i, event.target.value)}
+                value={formData.choices[i]?.code}
+                required
+              >
+                <option value="">Select {x.name}</option>
+                {x.options?.map((y, j) => (
+                  <option className="p-4" key={`input-option-${y.code}`} value={y.code}>
+                    {y.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          ) : (
+            <div className="flex flex-col">
+              <label className="text-sm text-black">{x.name}</label>
+              <input
+                type="text"
+                className="outline-none w-full p-2 mt-1 rounded-md border"
+                onChange={(event) => onFieldChange(subTab, i, event.target.value)}
+                value={formData.choices[i]?.value || ""}
+                placeholder={`Type ${x.name}`}
+                required
+              />
+              {x.level_type === "email_address" &&
+                (formData.choices[i]?.value.length === 0 || !formData.choices[i]?.value.includes("@")) && (
+                  <p className="text-sm text-red-500">Invalid {x.name}</p>
+                )}
+              {x.level_type === "mobile_number" &&
+                (formData.choices[i]?.value.length === 0 || formData.choices[i]?.value.length !== 10) && (
+                  <p className="text-sm text-red-500">Invalid Phone Number</p>
+                )}
+              {x.level_type === "account" &&
+                (!formData.choices[i]?.value || formData.choices[i]?.value === "") && (
+                  <p className="text-sm text-red-500">Invalid {x.name}</p>
+                )}
+              <div className="flex flex-row gap-4">
+                <button
+                  className="inline-block mt-4  shadow-md shadow-orange-300 text-white text-sm  bg-black rounded-3xl w-1/2 text-center   hover:bg-customYellow"
+                  onClick={() => updateFaSubmit()}
                 >
-                  <option value="">Select {x.name}</option>
-                  {x.options?.map((y, j) => (
-                    <option className="p-4" key={`input-option-${j}`} value={y.code}>
-                      {y.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            ) : (
-              <div className="flex flex-col">
-                <label className="text-sm text-black">{x.name}</label>
-                <input
-                  type="text"
-                  className="outline-none w-full p-2 mt-1 rounded-md border"
-                  onChange={(event) => onFieldChange(subTab, i, event.target.value)}
-                  value={formData.choices[i]?.value || ""}
-                  placeholder={`Type ${x.name}`}
-                  required
-                />
-                {x.level_type === "email_address" &&
-                  (formData.choices[i]?.value.length === 0 || !formData.choices[i]?.value.includes("@")) && (
-                    <p className="text-sm text-red-500">Invalid {x.name}</p>
-                  )}
-                {x.level_type === "mobile_number" &&
-                  (formData.choices[i]?.value.length === 0 || formData.choices[i]?.value.length !== 10) && (
-                    <p className="text-sm text-red-500">Invalid Phone Number</p>
-                  )}
-                {x.level_type === "account" &&
-                  (!formData.choices[i]?.value || formData.choices[i]?.value === "") && (
-                    <p className="text-sm text-red-500">Invalid {x.name}</p>
-                  )}
-                <div className="flex flex-row gap-4">
-                  <button
-                    className="inline-block mt-4  shadow-md shadow-orange-300 text-white text-sm  bg-black rounded-3xl w-1/2 text-center   hover:bg-customYellow"
-                    onClick={() => updateFaSubmit()}
-                  >
-                    {t("submit")}
-                  </button>
+                  {t("submit")}
+                </button>
 
-                  <div className="inline-block shadow-md shadow-gray-300 mt-4 border border-gray-500 rounded-3xl w-1/2 text-center p-2 hover:border-black hover:border-2">
-                    <Link href={`/${localActive}/home`} className="text-gray-500 text-sm">
-                      CANCEL
-                    </Link>
-                  </div>
+                <div className="inline-block shadow-md shadow-gray-300 mt-4 border border-gray-500 rounded-3xl w-1/2 text-center p-2 hover:border-black hover:border-2">
+                  <Link href={`/${localActive}/home`} className="text-gray-500 text-sm">
+                    CANCEL
+                  </Link>
                 </div>
               </div>
-            ))}
+            </div>
+          )}
         </div>
       ))}
     </div>
   );
-
-  console.log(formData.choices);
   const subTabs = [1, 2, 3];
 
   return (

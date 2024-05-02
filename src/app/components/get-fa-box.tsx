@@ -4,20 +4,32 @@ import {CircularProgress} from "@mui/material";
 import {useEffect, useState} from "react";
 import Link from "next/link";
 import {useLocale} from "next-intl";
+import {useRouter} from "next/navigation";
 import Image from "next/image";
 import {useTranslations} from "next-intl";
-import {unlinkFa} from "@/utils/unlink";
-import {getFa} from "@/utils/resolve";
-import {prefixBasePath} from "@/utils/path";
+import {Dialog, Transition} from "@headlessui/react";
+import {Fragment} from "react";
 import {useUnlinked} from "@/app/store/auth-context";
-
+import {prefixBasePath} from "@/utils/path";
+import {getFa} from "@/utils/resolve";
+import {unlinkFa} from "@/utils/unlink";
 export default function GetFaBox() {
   const localActive = useLocale();
   const [getFaResult, setGetFaResult] = useState<any>();
   const {setUnLinked, isUnLinked} = useUnlinked();
   // 0 - default/empty. 1 - loading. 2 - output. 3 - error.
   const [renderState, setRenderState] = useState(0);
+  const router = useRouter();
   const t = useTranslations("home");
+  let [isOpen, setIsOpen] = useState(false);
+
+  function closeModal() {
+    setIsOpen(false);
+  }
+
+  function openModal() {
+    setIsOpen(true);
+  }
 
   function onClick() {
     setRenderState(1);
@@ -28,7 +40,6 @@ export default function GetFaBox() {
         } else if (res.response_payload.fa === null) {
           setGetFaResult(res.response_payload.fa);
           setUnLinked(true);
-          console.log("isUnLinked updated:", res.response_payload.fa === null);
         }
         setRenderState(2);
       },
@@ -39,14 +50,13 @@ export default function GetFaBox() {
   }
 
   useEffect(() => {
-    console.log("isUnLinked :", isUnLinked);
-    // console.log("setIsUnLinked :", setIsUnLinked);
     onClick();
   }, [isUnLinked]);
 
-  const handleClick = () => {
+  const handleConfirm = () => {
     setUnLinked(true);
     unlinkFa();
+    router.push("/en/delete");
   };
 
   return (
@@ -75,6 +85,66 @@ export default function GetFaBox() {
         )}
         {renderState === 2 && getFaResult && (
           <div>
+            <Transition appear show={isOpen} as={Fragment}>
+              <Dialog as="div" className="relative z-10" onClose={closeModal}>
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0"
+                  enterTo="opacity-100"
+                  leave="ease-in duration-200"
+                  leaveFrom="opacity-100"
+                  leaveTo="opacity-0"
+                >
+                  <div className="fixed inset-0 bg-black/25" />
+                </Transition.Child>
+
+                <div className="fixed inset-0 overflow-y-auto">
+                  <div className="flex min-h-full items-center justify-center p-4 text-center">
+                    <Transition.Child
+                      as={Fragment}
+                      enter="ease-out duration-300"
+                      enterFrom="opacity-0 scale-95"
+                      enterTo="opacity-100 scale-100"
+                      leave="ease-in duration-200"
+                      leaveFrom="opacity-100 scale-100"
+                      leaveTo="opacity-0 scale-95"
+                    >
+                      <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                        {/* <Dialog.Title
+                    as="h3"
+                    className="text-lg font-medium leading-6 text-gray-900"
+                  >
+                    Payment successful
+                  </Dialog.Title> */}
+                        <div className="mt-2">
+                          <p className="text-sm text-gray-500">
+                            Are you sure you want to remove your account?
+                          </p>
+                        </div>
+
+                        <div className="flex flex-row justify-between mt-4">
+                          <button
+                            type="button"
+                            className="rounded-md border border-transparent bg-blue-400 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-800"
+                            onClick={handleConfirm}
+                          >
+                            Yes
+                          </button>
+                          <button
+                            type="button"
+                            className="rounded-md border border-transparent bg-red-400 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-red-800"
+                            onClick={closeModal}
+                          >
+                            No
+                          </button>
+                        </div>
+                      </Dialog.Panel>
+                    </Transition.Child>
+                  </div>
+                </div>
+              </Dialog>
+            </Transition>
             <ul className="w-full">
               <div className="flex flex-col">
                 <div className="text-orange-500 text-2xl">{t("title")}</div>
@@ -126,14 +196,14 @@ export default function GetFaBox() {
                     </li>
                   </>
                 )}
-                {getFaResult.fa_type === "mobile" && (
+                {getFaResult.fa_type === "mobile_wallet_provider" && (
                   <>
                     <li className="border-b-2  border-orange-200 border-opacity-100 p-2 flex items-start space-x-4">
                       <div className="flex flex-row">
                         <span>
                           <Image
                             className="w-10 h-10 inline-block mt-2 bg-orange-200 rounded-lg"
-                            src={prefixBasePath(`/img/${t("_provider")}.png`)}
+                            src={prefixBasePath("/img/Mobile Wallet.png")}
                             alt={t("mobile_provider")}
                             width={50}
                             height={50}
@@ -164,14 +234,14 @@ export default function GetFaBox() {
                     </li>
                   </>
                 )}
-                {getFaResult.fa_type === "email" && (
+                {getFaResult.fa_type === "email_wallet_provider" && (
                   <>
                     <li className="border-b-2  border-orange-200 border-opacity-100 p-2 flex items-start space-x-4">
                       <div className="flex flex-row">
                         <span>
                           <Image
                             className="w-10 h-10 inline-block mt-2 bg-orange-200 rounded-lg"
-                            src={prefixBasePath(`/img/email.png`)}
+                            src={prefixBasePath("/img/Email Wallet.png")}
                             alt={t("email_provider")}
                             width={50}
                             height={50}
@@ -208,10 +278,10 @@ export default function GetFaBox() {
                   {t("button_text2")}
                 </Link>
               </div>
-              <div className="   p-2    mt-6 ml-2">
-                <Link onClick={handleClick} href={`/${localActive}/delete`} className="text-blue-700 text-sm">
+              <div className="p-2    mt-6 ml-2">
+                <button onClick={openModal} className="text-blue-700 text-sm">
                   {t("button_text3")}
-                </Link>
+                </button>
               </div>
             </div>
           </div>

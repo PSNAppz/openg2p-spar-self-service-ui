@@ -1,7 +1,7 @@
 import {prefixBaseApiPath} from "./path";
 
 export function unlinkFa() {
-  fetch(prefixBaseApiPath("/selfservice/unlink"), {
+  fetch(prefixBaseApiPath("/unlink"), {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

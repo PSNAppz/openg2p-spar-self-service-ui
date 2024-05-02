@@ -16,7 +16,7 @@ export function linkFa(levelValues: LinkOrUpdate) {
     },
   };
 
-  fetch(prefixBaseApiPath("/selfservice/link"), {
+  fetch(prefixBaseApiPath("/link"), {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
