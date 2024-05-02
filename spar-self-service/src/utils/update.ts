@@ -19,7 +19,7 @@ export function updateFa(
     }
   };
 
-  fetch(prefixBaseApiPath("/selfservice/update"), {
+  fetch(prefixBaseApiPath("/update"), {
     method: "POST",
     headers: {
       "Content-Type": "application/json"

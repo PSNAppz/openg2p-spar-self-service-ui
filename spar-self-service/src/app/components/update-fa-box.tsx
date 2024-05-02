@@ -1,4 +1,3 @@
-
 "use client";
 import { useEffect, useState } from "react";
 import { prefixBaseApiPath, prefixBasePath } from "@/utils/path";
@@ -31,7 +30,6 @@ export interface LinkOrUpdate {
   email_address?: string;
 }
 
-export const initialFinalData: LinkOrUpdate = {};
 
 export default function UpdateFaBox() {
   const localActive = useLocale();
@@ -42,7 +40,7 @@ export default function UpdateFaBox() {
   const [subTab, setSubTab] = useState(0);
   const [formData, setFormData] = useState<State>({ choices: [], levels: [] });
 
-  const [finalData, setFinalData] = useState<LinkOrUpdate>(initialFinalData);
+  const [finalData, setFinalData] = useState<LinkOrUpdate>({});
 
 
   const [Level, setLevel] = useState<FormLevel[]>();
@@ -53,6 +51,7 @@ export default function UpdateFaBox() {
   const [isValidPhone, isntValidPhone] = useState(true);
   const [isValidAcc, isntValidAcc] = useState(true);
   const [levelsSet, setLevelsSet] = useState(false);
+
   function pushOrResetArrayAfterIndex<T>(arr: T[], index: number, value: T) {
     if (arr.length <= index) {
       arr.push(value);
@@ -61,7 +60,7 @@ export default function UpdateFaBox() {
       arr.length = index + 1;
     }
   }
-console.log("isUnLinked",isUnLinked)
+
   function fetchLevelsAndRender(
     tab: any,
     localFormData: State,
@@ -175,19 +174,6 @@ console.log("isUnLinked",isUnLinked)
             setLevel(levels);
             setLevelsSet(true);
           }
-          let formDataToPush: FormLevel;
-
-          if (tab === 0 || tab === 1) {
-            formDataToPush = levels[0];
-
-          } else if (tab == 2) {
-            formDataToPush = levels[1];
-
-          } else {
-            formDataToPush = levels[2];
-          }
-          pushOrResetArrayAfterIndex(localFormData.levels, listIndex, formDataToPush);
-          setFormData(localFormData);
         }
       });
     });
@@ -220,10 +206,9 @@ console.log("isUnLinked",isUnLinked)
         if (x.name === "Account") {
           const regex = new RegExp(x.validation_regex);
           const value = formData.choices[i]?.value || "";
-          console.log("Regex pattern:", x.validation_regex);
-          console.log("Value:", value);
+      
           if (!value || value === "" || !regex.test(value)) {
-            console.log("Invalid account value:", value);
+          
             accIsValid = false;
           } else {
             console.log("Valid account value:", value);
@@ -244,52 +229,29 @@ console.log("isUnLinked",isUnLinked)
         }
         return;
       }
-      if (formData.choices[1].key == "Bank") {
-        finalData.fa_type = "bank"
-        finalData.strategy_id = formData.choices[1].strategy
-        finalData.bank_name = formData.choices[1].value
-        finalData.bank_code = formData.choices[1].code
-        finalData.branch_name = formData.choices[2].value
-        finalData.branch_code = formData.choices[2].code
-        finalData.account_number = formData.choices[3].value
-      }
-      else if (formData.choices[0].key == "Bank" && formData.choices[1].key == "Mobile Wallet") {
-        finalData.fa_type = "mobile_wallet_provider"
-        finalData.wallet_provider_name = formData.choices[1].value
-        finalData.strategy_id = formData.choices[1].strategy
-        finalData.wallet_provider_code = formData.choices[1].code
-        finalData.mobile_number = formData.choices[2].value}
-      
-      else if (formData.choices[0].key == "Bank") {
+      if (formData.choices[0].key == "Bank") {
         finalData.fa_type = "bank"
         finalData.strategy_id = formData.choices[0].strategy
         finalData.bank_name = formData.choices[0].value
         finalData.bank_code = formData.choices[0].code
         finalData.branch_name = formData.choices[1].value
         finalData.branch_code = formData.choices[1].code
-        finalData.account_number = formData.choices[3].value
+        finalData.account_number = formData.choices[2].value
       } else if (formData.choices[0].key == "Mobile Wallet") {
         finalData.fa_type = "mobile_wallet_provider"
         finalData.wallet_provider_name = formData.choices[0].value
         finalData.strategy_id = formData.choices[0].strategy
         finalData.wallet_provider_code = formData.choices[0].code
-        finalData.mobile_number = formData.choices[2].value
+        finalData.mobile_number = formData.choices[1].value
       } 
       else if (formData.choices[0].key == "Email Wallet") {
-        finalData.fa_type = "mobile_wallet_provider"
+        finalData.fa_type = "email_wallet_provider"
         finalData.wallet_provider_name = formData.choices[0].value
         finalData.strategy_id = formData.choices[0].strategy
         finalData.wallet_provider_code = formData.choices[0].code
-        finalData.email_address = formData.choices[2].value
-      } else if (formData.choices[0].key == "Bank" && formData.choices[1].key == "Email Wallet" ) {
-        finalData.fa_type = "mobile_wallet_provider"
-        finalData.wallet_provider_name = formData.choices[1].value
-        finalData.strategy_id = formData.choices[1].strategy
-        finalData.wallet_provider_code = formData.choices[1].code
-        finalData.email_address = formData.choices[2].value
-      }
-      console.log(finalData)
-      console.log(isUnLinked)
+        finalData.email_address = formData.choices[1].value
+      } 
+
       if (!isUnLinked) {
         updateFa(finalData);
         setDataSubmitted(true);
@@ -308,20 +270,19 @@ console.log("isUnLinked",isUnLinked)
     }
   }
 
-
+console.log(formData.choices)
   function onFieldChange(tab: number, listIndex: number, code: string) {
 
     const localFormData = structuredClone(formData);
-    const formLevel = localFormData.levels[listIndex];
-
+    const formLevel = formData.levels[listIndex];
     let selectedOption: FormLevelValue;
     let namevalue: string = '';
     let strategy: number = 0;
     formLevel.options?.forEach((x) => {
       if (x.code === code) {
         selectedOption = x;
-        namevalue = x.name,
-          strategy = x.strategy_id
+        namevalue = x.name;
+        strategy = x.strategy_id
         fetchLevelsAndRender(0, localFormData, listIndex + 1, selectedOption.level_id, selectedOption.id);
         return;
       }
@@ -330,6 +291,7 @@ console.log("isUnLinked",isUnLinked)
       key: formLevel.name,
       value: namevalue, code, strategy
     };
+   
     pushOrResetArrayAfterIndex(localFormData.choices, listIndex, codeObject);
     if (formLevel.input_type == 'input') {
       localFormData.choices[listIndex] = { key: formLevel.name, value: code };
@@ -340,15 +302,13 @@ console.log("isUnLinked",isUnLinked)
   }
   const handleTabClick = (tab: any, id: number, parent: number) => {
     const updatedFormData = { ...formData };
-    console.log(updatedFormData)
     setSubTab(tab);
     const vals = Level;
     if (vals) {
       const tabIndex = vals.findIndex((option) => option.id === id);
-      fetchLevelsAndRender(tab, formData, 1, parent, 0, id)
+      fetchLevelsAndRender(tab, formData, 0, parent, 0, id)
       if (tabIndex !== -1) {
         const selectedOption = vals[tabIndex];
-        onFieldChange(tab, 0, selectedOption.name);
         setFormData(updatedFormData);
       }
     }
@@ -357,23 +317,24 @@ console.log("isUnLinked",isUnLinked)
 
     updateFaSubmit();
   }, []);
+
   const renderFormInputs = (subTab: number) => (
     <div>
       {formData.levels.map((x, i) => (
-        <div key={`input-${i}`} className="mb-2 mt-0 p-0">
-          {i > 0 && (
+        <div key={`input-${x.level_type}`} className="mb-2 mt-0 p-0">
+          {(
             x.input_type === 'select' ? (
               <div>
                 <label className="text-black text-sm">{x.name}</label>
                 <select
                   className="outline-none w-full border-t-2 p-3 border border-gray-500 shadow-md rounded-md bg-white"
                   onChange={(event) => onFieldChange(subTab, i, event.target.value)}
-                  value={formData.choices[i]?.value}
+                  value={formData.choices[i]?.code}
                   required
                 >
                   <option value="">Select {x.name}</option>
                   {x.options?.map((y, j) => (
-                    <option className="p-4" key={`input-option-${j}`} value={y.code}>
+                    <option className="p-4" key={`input-option-${y.code}`} value={y.code}>
                       {y.name}
                     </option>
                   ))}
@@ -425,9 +386,9 @@ console.log("isUnLinked",isUnLinked)
       ))}
     </div>
   );
-
-  console.log(formData.choices)
   const subTabs = [1, 2, 3]
+
+
 
   return (
     <>
