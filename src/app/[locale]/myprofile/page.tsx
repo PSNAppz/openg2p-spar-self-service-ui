@@ -66,7 +66,7 @@ export default function ProfilePage() {
                       <div className=" rounded-lg opacity-100 w-10 h-10 m-2 flex-shrink-0  ">
                         <Image
                           className="square-full "
-                          src={prefixBasePath("/img/email.png")}
+                          src={prefixBasePath("/img/Email Wallet.png")}
                           alt="email"
                           width={100}
                           height={300}

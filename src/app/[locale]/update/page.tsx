@@ -19,7 +19,7 @@ export default function Next() {
       <div className="flex flex-row ">
         <div className="2xl:h-screen bg-gray-100 basis-1/2 flex items-center justify-center ">
           <div className="pl-6 mt-16 pt-2 pb-0 mb-0 ">
-            <Image src={prefixBasePath("/img/infographic_01.png")} alt="person" />
+            <img src={prefixBasePath("/img/infographic_01.png")} alt="person" />
           </div>
         </div>
         <div className=" max-w-sm flex flex-col m-8 pl-6 basis-1/2 ">
