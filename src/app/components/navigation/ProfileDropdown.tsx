@@ -27,7 +27,7 @@ export default function ProfileDropDown() {
     }).finally(() => {
       authContext.profile = null;
       setProfile(null);
-      router.push("/en/login");
+      router.push(`/${localActive}/login`);
     });
   };
 

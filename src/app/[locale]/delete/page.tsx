@@ -19,7 +19,7 @@ export default function Next() {
 
   useEffect(() => {
     if (!isUnLinked) {
-      router.push("/en/home");
+      router.push(`/${localActive}/home`);
     }
   }, []);
 

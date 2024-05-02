@@ -1,5 +1,7 @@
 import {redirect} from "next/navigation";
+import {getDefaultLocale} from "@/utils/lang";
 
 export default function RootPage() {
-  redirect("/en");
+  const defaultLocale = getDefaultLocale();
+  redirect(`/${defaultLocale}`);
 }

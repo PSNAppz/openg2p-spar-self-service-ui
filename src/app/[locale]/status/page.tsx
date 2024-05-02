@@ -20,7 +20,7 @@ export default function Next() {
 
   useEffect(() => {
     if (!isDataSubmitted) {
-      router.push("/en/home");
+      router.push(`/${localActive}/home`);
     }
   }, []);
 

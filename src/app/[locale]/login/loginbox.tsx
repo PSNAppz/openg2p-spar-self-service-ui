@@ -45,7 +45,7 @@ export default function LoginBox() {
                 )}
                 className="text-white font-bold text-xl p-4"
               >
-                {t("button_text")}
+                {t(x.displayName)}
               </a>
             </div>
           ))}
