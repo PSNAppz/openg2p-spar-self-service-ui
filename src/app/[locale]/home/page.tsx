@@ -1,5 +1,4 @@
 import {useLocale} from "next-intl";
-import Image from "next/image";
 import {Suspense} from "react";
 import {GetFaBox} from "@/app/components";
 import {AuthUtil} from "@/app/components/auth";
@@ -15,7 +14,7 @@ export default function Next() {
       <div className="flex flex-row ">
         <div className="2xl:h-screen bg-gray-100 basis-1/2 flex items-center justify-center">
           <div className="pl-6 mt-12">
-            <img src={prefixBasePath("/img/infographic_02.png")}  alt="person" />
+            <img src={prefixBasePath("/img/infographic_02.png")} alt="person" />
           </div>
         </div>
         <div className="max-w-sm flex flex-col m-12 basis-1/2">

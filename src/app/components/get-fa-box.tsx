@@ -158,7 +158,7 @@ export default function GetFaBox() {
                         <span>
                           <Image
                             className="w-10 h-10 inline-block mt-2 bg-orange-200 rounded-lg"
-                            src={prefixBasePath('/img/Bank.png')}
+                            src={prefixBasePath("/img/Bank.png")}
                             alt={t("bank")}
                             width={50}
                             height={50}

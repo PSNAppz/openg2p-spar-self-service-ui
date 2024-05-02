@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import {useLocale} from "next-intl";
 import {useTranslations} from "next-intl";
 import {Suspense} from "react";
