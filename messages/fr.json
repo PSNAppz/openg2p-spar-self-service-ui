@@ -44,7 +44,12 @@
     "email": "Email",
     "dob": "Date de naissance",
     "gender": "Genre",
-    "add": "Adresse"
+    "add": "Adresse",
+    "locality": "Localité",
+    "street_address": "Adresse",
+    "country": "Pays",
+    "region": "Région",
+    "postal_code": "Code Postal"
   },
   "login": {
     "title": "Registre de Compte de Paiements Sociaux",
