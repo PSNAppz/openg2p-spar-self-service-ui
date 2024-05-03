@@ -56,7 +56,7 @@ export default function GetFaBox() {
   const handleConfirm = () => {
     setUnLinked(true);
     unlinkFa();
-    router.push("/en/delete");
+    router.push(`/${localActive}/delete`);
   };
 
   return (
@@ -111,12 +111,7 @@ export default function GetFaBox() {
                       leaveTo="opacity-0 scale-95"
                     >
                       <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                        {/* <Dialog.Title
-                    as="h3"
-                    className="text-lg font-medium leading-6 text-gray-900"
-                  >
-                    Payment successful
-                  </Dialog.Title> */}
+                        
                         <div className="mt-2">
                           <p className="text-sm text-gray-500">
                             Are you sure you want to remove your account?
@@ -167,7 +162,7 @@ export default function GetFaBox() {
                         <div className="flex-1 min-w-0 mt-1 pl-4">
                           <div className="text-sm font-medium text-gray-600 no-underline">{t("bank")}</div>
                           <p className="text-md text-black font-semibold mx-auto">
-                            {getFaResult.bank_name}({getFaResult.bank_code})
+                            {getFaResult.bank_name} ({getFaResult.bank_code})
                           </p>
                         </div>
                       </div>
@@ -178,7 +173,7 @@ export default function GetFaBox() {
                         <div className="flex-1 min-w-0 mt-1 pl-4">
                           <div className="text-sm font-medium text-gray-600 no-underline">{t("branch")}</div>
                           <p className="text-md text-black font-semibold mx-auto">
-                            {getFaResult.branch_name}({getFaResult.branch_code})
+                            {getFaResult.branch_name} ({getFaResult.branch_code})
                           </p>
                         </div>
                       </div>
@@ -214,7 +209,7 @@ export default function GetFaBox() {
                             {t("mobile_provider")}
                           </div>
                           <p className="text-md text-black font-semibold mx-auto">
-                            {getFaResult.wallet_provider_name}({getFaResult.wallet_provider_code})
+                            {getFaResult.wallet_provider_name} ({getFaResult.wallet_provider_code})
                           </p>
                         </div>
                       </div>
@@ -252,7 +247,7 @@ export default function GetFaBox() {
                             {t("email_provider")}
                           </div>
                           <p className="text-md text-black font-semibold mx-auto">
-                            {getFaResult.wallet_provider_name}({getFaResult.wallet_provider_code})
+                            {getFaResult.wallet_provider_name} ({getFaResult.wallet_provider_code})
                           </p>
                         </div>
                       </div>

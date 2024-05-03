@@ -33,7 +33,7 @@ export default function Header() {
 
               {profile && (
                 <div className="flex flex-row">
-                  <div className="mt-5">Hello, {profile.name}</div>
+                  <div className="mt-6">Hello, {profile.name}</div>
                   <ProfileDropDown />
                 </div>
               )}

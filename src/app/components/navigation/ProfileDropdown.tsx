@@ -30,18 +30,22 @@ export default function ProfileDropDown() {
       router.push(`/${localActive}/login`);
     });
   };
+  const {profile} = useAuth();
 
+  const profilePicture = profile?.picture || prefixBasePath("/img/user_image_02.png");
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="flex justify-between items-center w-full gap-x-2 px-2 py-2 text-sm  text-black hover:bg-gray-50">
-          <Image
-            src={prefixBasePath("/img/user_image.png")}
-            alt="user"
-            className="w-full"
-            width={400}
-            height={400}
-          />
+        <div className="relative rounded-lg overflow-hidden border-2 border-gray-200">
+        <Image
+          src={profilePicture}
+          alt="user"
+          className=""
+          width={50}
+          height={50}
+        />
+      </div>
         </Menu.Button>
       </div>
 

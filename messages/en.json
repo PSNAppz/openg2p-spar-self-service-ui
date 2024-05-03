@@ -45,7 +45,12 @@
     "email": "Email",
     "dob": "Date of Birth",
     "gender": "Gender",
-    "add": "Address"
+    "add": "Address",
+    "locality":"Locality",
+    "street_address": "Street Address",
+    "country": "Country",
+    "region": "Region",
+    "postal_code": "Postal Code"
   },
   "login": {
     "title": " Social Payments Account Registry",

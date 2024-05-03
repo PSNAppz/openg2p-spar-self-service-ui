@@ -44,7 +44,12 @@
     "email": "Email",
     "dob": "Petsa ng Kapanganakan",
     "gender": "Kasarian",
-    "add": "Address"
+    "add": "Address",
+    "locality": "Lokalidad",
+    "street_address": "Alamat sa Kalye",
+    "country": "Bansa",
+    "region": "Rehiyon",
+    "postal_code": "Kodigo ng Zip"
   },
   "login": {
     "title": "Rehistro ng Social Payments Account",
