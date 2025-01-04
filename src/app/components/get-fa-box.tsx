@@ -146,7 +146,7 @@ export default function GetFaBox() {
                 <div className="w-full border-b-2 border-orange-200 border-opacity-100 p-2 flex items-start space-x-4 mb-4"></div>
               </div>
               <>
-                {getFaResult.fa_type === "bank" && (
+                {getFaResult.fa_type === "BANK_ACCOUNT" && (
                   <>
                     <li className="border-b-2  border-orange-200 border-opacity-100 p-2 flex items-start space-x-4">
                       <div className="flex flex-row">
@@ -191,7 +191,7 @@ export default function GetFaBox() {
                     </li>
                   </>
                 )}
-                {getFaResult.fa_type === "mobile_wallet_provider" && (
+                {getFaResult.fa_type === "MOBILE_WALLET" && (
                   <>
                     <li className="border-b-2  border-orange-200 border-opacity-100 p-2 flex items-start space-x-4">
                       <div className="flex flex-row">
@@ -229,7 +229,7 @@ export default function GetFaBox() {
                     </li>
                   </>
                 )}
-                {getFaResult.fa_type === "email_wallet_provider" && (
+                {getFaResult.fa_type === "EMAIL_WALLET" && (
                   <>
                     <li className="border-b-2  border-orange-200 border-opacity-100 p-2 flex items-start space-x-4">
                       <div className="flex flex-row">

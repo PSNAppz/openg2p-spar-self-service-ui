@@ -215,7 +215,7 @@ export default function UpdateFaBox() {
         return;
       }
       if (formData.choices[0].key == "Bank") {
-        finalData.fa_type = "bank";
+        finalData.fa_type = "BANK_ACCOUNT";
         finalData.strategy_id = formData.choices[0].strategy;
         finalData.bank_name = formData.choices[0].value;
         finalData.bank_code = formData.choices[0].code;
@@ -223,13 +223,13 @@ export default function UpdateFaBox() {
         finalData.branch_code = formData.choices[1].code;
         finalData.account_number = formData.choices[2].value;
       } else if (formData.choices[0].key == "Mobile Wallet") {
-        finalData.fa_type = "mobile_wallet_provider";
+        finalData.fa_type = "MOBILE_WALLET";
         finalData.wallet_provider_name = formData.choices[0].value;
         finalData.strategy_id = formData.choices[0].strategy;
         finalData.wallet_provider_code = formData.choices[0].code;
         finalData.mobile_number = formData.choices[1].value;
       } else if (formData.choices[0].key == "Email Wallet") {
-        finalData.fa_type = "email_wallet_provider";
+        finalData.fa_type = "EMAIL_WALLET";
         finalData.wallet_provider_name = formData.choices[0].value;
         finalData.strategy_id = formData.choices[0].strategy;
         finalData.wallet_provider_code = formData.choices[0].code;
