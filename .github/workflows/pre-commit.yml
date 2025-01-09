@@ -1,0 +1,25 @@
+name: pre-commit
+
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+
+jobs:
+  pre-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup Node and cache
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+      - name: Install node packages
+        run: npm ci
+      - name: Format and lint
+        run: |
+          { npm run format && npm run lint ; } | tee /tmp/lint.log
+          if [ -n "$(grep -i 'Warning:' /tmp/lint.log)" ]; then
+            echo "::warning:: Encountered Warinings during linting. Check logs for more details."
+          fi
