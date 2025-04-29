@@ -6,6 +6,7 @@ const withNextIntl = createNextIntlPlugin();
 const nextConfig = {
   basePath: process.env.NEXT_PUBLIC_BASE_PATH || "",
   output: "standalone",
+  poweredByHeader: false,
 };
 
 module.exports = withNextIntl(nextConfig);
